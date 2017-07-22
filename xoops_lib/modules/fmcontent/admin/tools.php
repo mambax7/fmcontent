@@ -38,7 +38,7 @@ switch ($op) {
     default:
         
         // rebuild alias
-        $form = new XoopsThemeForm(_FMCONTENT_ALIAS_TITLE, 'tools', 'tools.php', 'post');  
+        $form = new XoopsThemeForm(_FMCONTENT_ALIAS_TITLE, 'tools', 'tools.php', 'post', true);  
         $form->addElement(new XoopsFormRadioYN ( _FMCONTENT_ALIAS_CONTENT, 'topic', "1" ));
         $form->addElement(new XoopsFormRadioYN ( _FMCONTENT_ALIAS_TOPIC, 'content', "1" ));
         $form->addElement(new XoopsFormHidden('op', 'alias'));
@@ -46,7 +46,7 @@ switch ($op) {
         $xoopsTpl->assign('alias', $form->render());
         
         // meta alias
-        $form = new XoopsThemeForm(_FMCONTENT_META_TITLE, 'tools', 'tools.php', 'post');  
+        $form = new XoopsThemeForm(_FMCONTENT_META_TITLE, 'tools', 'tools.php', 'post', true);  
         $form->addElement(new XoopsFormRadioYN ( _FMCONTENT_META_KEYWORD, 'keyword', "1" ));
         $form->addElement(new XoopsFormRadioYN ( _FMCONTENT_META_DESCRIPTION, 'description', "1" ));
         $form->addElement(new XoopsFormHidden('op', 'meta'));
@@ -54,7 +54,7 @@ switch ($op) {
         $xoopsTpl->assign('meta', $form->render());
 
         // Add clone
-        $form = new XoopsThemeForm(_FMCONTENT_FORMFOLDER_TITLE, 'tools', 'tools.php', 'post');
+        $form = new XoopsThemeForm(_FMCONTENT_FORMFOLDER_TITLE, 'tools', 'tools.php', 'post', true);
         $form->addElement(new XoopsFormText(_FMCONTENT_FORMFOLDER_NAME, 'folder_name', 50, 255, ''), true);
         $form->addElement(new XoopsFormHidden('op', 'clone'));
         $button_tray = new XoopsFormElementTray('', '');
@@ -66,7 +66,7 @@ switch ($op) {
         // remove contents form 
         $module_handler = xoops_gethandler('module');
         $result = $GLOBALS["xoopsDB"]->query("SELECT DISTINCT(content_modid) FROM " . $GLOBALS["xoopsDB"]->prefix('fmcontent_content'));
-        $form = new XoopsThemeForm(_FMCONTENT_FORMPURGE_TITLE, 'tools', 'tools.php', 'post');
+        $form = new XoopsThemeForm(_FMCONTENT_FORMPURGE_TITLE, 'tools', 'tools.php', 'post', true);
         $form->addElement(new XoopsFormHidden('op', 'purge'));
         $clone = array();
         while ($myrow = $GLOBALS["xoopsDB"]->fetchArray($result)) {
