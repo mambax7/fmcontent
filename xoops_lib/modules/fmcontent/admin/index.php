@@ -12,49 +12,110 @@
 /**
  * FmContent Admin page
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright   XOOPS Project (https://xoops.org)
  * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
  * @author      Andricq Nicolas (AKA MusS)
  * @author      Hossein Azizabadi (AKA Voltan)
- * @version     $Id$
  */
 
-if (!isset($forMods)) exit('Module not found');
-$index_admin = new ModuleAdmin();
+use Xmf\Module\Admin;
+use Xmf\Request;
+use Xmf\Yaml;
+use XoopsModules\Fmcontent\{Common,
+    Helper,
+    Utility
+};
+
+/** @var Admin $adminObject */
+/** @var Helper $helper */
+/** @var Utility $utility */
+
+if (!isset($forMods)) {
+    exit('Module not found');
+}
+
+include __DIR__ . '/admin_header.php';
+
+$adminObject = Admin::getInstance();
 // Display Admin header
 xoops_cp_header();
 // Add module stylesheet
 $xoTheme->addStylesheet(XOOPS_URL . '/modules/' . $forMods->getVar('dirname') . '/css/admin.css');
 $xoTheme->addStylesheet(XOOPS_URL . '/modules/system/css/admin.css');
 
-$topic_handler = xoops_getmodulehandler('topic', 'fmcontent');
-$content_handler = xoops_getmodulehandler('page', 'fmcontent');
+$topicHandler   = Helper::getInstance()->getHandler('Topic');
+$pageHandler = Helper::getInstance()->getHandler('Page');
 
-$folder = array(
-	XOOPS_ROOT_PATH . '/uploads/fmcontent/', 
-	XOOPS_ROOT_PATH . '/uploads/fmcontent/img',
-	XOOPS_ROOT_PATH . '/uploads/fmcontent/file'
-);
+$folder = [
+    XOOPS_ROOT_PATH . '/uploads/fmcontent/',
+    XOOPS_ROOT_PATH . '/uploads/fmcontent/img',
+    XOOPS_ROOT_PATH . '/uploads/fmcontent/file',
+];
 
-$index_admin = new ModuleAdmin();
-$index_admin->addInfoBox(_FMCONTENT_ADMENU1);
-$index_admin->addInfoBox(_FMCONTENT_ADMENU2);
-$index_admin->addInfoBoxLine(_FMCONTENT_ADMENU1, _FMCONTENT_INDEX_TOPICS, $topic_handler->getTopicCount($forMods));
-$index_admin->addInfoBoxLine(_FMCONTENT_ADMENU2, _FMCONTENT_INDEX_CONTENTS, $content_handler->getContentItemCount($forMods));
+//$adminObject = new ModuleAdmin();
+$adminObject->addInfoBox(_FMCONTENT_ADMENU1);
+$adminObject->addInfoBoxLine(sprintf(_FMCONTENT_INDEX_TOPICS, $topicHandler->getTopicCount($forMods)), '');
 
-foreach (array_keys( $folder) as $i) {
-    $index_admin->addConfigBoxLine($folder[$i], 'folder');
-    $index_admin->addConfigBoxLine(array($folder[$i], '777'), 'chmod');
+$adminObject->addInfoBox(_FMCONTENT_ADMENU2);
+$adminObject->addInfoBoxLine(sprintf(_FMCONTENT_INDEX_CONTENTS, $pageHandler->getContentItemCount($forMods)), '');
+
+foreach (array_keys($folder) as $i) {
+    $adminObject->addConfigBoxLine($folder[$i], 'folder');
+    $adminObject->addConfigBoxLine([$folder[$i], '777'], 'chmod');
 }
-    
+
 $xoopsTpl->assign('navigation', 'index');
 $xoopsTpl->assign('navtitle', _FMCONTENT_HOME);
-$xoopsTpl->assign('renderindex', $index_admin->renderIndex());
+$xoopsTpl->assign('renderindex', $adminObject->renderIndex());
 
 // Call template file
-$xoopsTpl->display(XOOPS_ROOT_PATH . '/modules/' . $forMods->getVar('dirname') . '/templates/admin/fmcontent_index.html');
+$xoopsTpl->display(XOOPS_ROOT_PATH . '/modules/' . $forMods->getVar('dirname') . '/templates/admin/fmcontent_index.tpl');
 
-// Display Xoops footer
-include "footer.php";
-xoops_cp_footer();
-?>
+//------------- End Test Data ----------------------------
+
+//$adminObject->displayIndex();
+
+/**
+ * @param $yamlFile
+ * @return array|bool
+ */
+function loadAdminConfig($yamlFile)
+{
+    $config = Yaml::readWrapped($yamlFile); // work with phpmyadmin YAML dumps
+    return $config;
+}
+
+/**
+ * @param $yamlFile
+ */
+function hideButtons($yamlFile)
+{
+    $app['displaySampleButton'] = 0;
+    Yaml::save($app, $yamlFile);
+    redirect_header('index.php', 0, '');
+}
+
+/**
+ * @param $yamlFile
+ */
+function showButtons($yamlFile)
+{
+    $app['displaySampleButton'] = 1;
+    Yaml::save($app, $yamlFile);
+    redirect_header('index.php', 0, '');
+}
+
+$op = Request::getString('op', 0, 'GET');
+
+switch ($op) {
+    case 'hide_buttons':
+        hideButtons($yamlFile);
+        break;
+    case 'show_buttons':
+        showButtons($yamlFile);
+        break;
+}
+
+echo $utility::getServerStats();
+
+require __DIR__ . '/admin_footer.php';

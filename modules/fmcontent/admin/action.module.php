@@ -12,17 +12,14 @@
 /**
  * FmContent action script file
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @copyright   {@link https://xoops.org/ XOOPS Project}
+ * @license     {@link http://www.fsf.org/copyleft/gpl.html GNU public license}
  * @author      Andricq Nicolas (AKA MusS)
- * @version     $Id$
  */
 
-if (!defined('XOOPS_TRUST_PATH')) die('set XOOPS_TRUST_PATH into mainfile.php');
 
-$mod_dirname = basename(dirname(__FILE__));
-$mod_dirpath = dirname(__FILE__);
 
-require XOOPS_TRUST_PATH . '/modules/fmcontent/admin/action.module.php';
+$mod_dirname = basename(__DIR__);
+$mod_dirpath = __DIR__;
 
-?>
+require_once XOOPS_TRUST_PATH . '/modules/fmcontent/admin/action.module.php';

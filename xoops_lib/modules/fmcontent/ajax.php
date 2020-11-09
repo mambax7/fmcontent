@@ -12,31 +12,35 @@
 /**
  * FmContent edit in place file
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright   XOOPS Project (https://xoops.org)
  * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
  * @author      Andricq Nicolas (AKA MusS)
- * @version     $Id$
  */
 
-if (!isset($forMods)) exit('Module not found');
+use XoopsModules\Fmcontent\Helper;
+
+if (!isset($forMods)) {
+    exit('Module not found');
+}
+
+require __DIR__ . '/header.php';
 
 error_reporting(0);
 $GLOBALS['xoopsLogger']->activated = false;
 
-$content_id = fmcontent_CleanVars($_REQUEST, 'id', '', 'string');
-$content_text = fmcontent_CleanVars($_REQUEST, 'value', '', 'string');
+$contentId = Request::getString('id', '');
+$content_text = Request::getString('value', '');
 
-list($root, $id) = explode('_', $content_id);
+[$root, $id] = explode('_', $contentId);
 
-if (intval($id) > 0) {
+if ((int)$id > 0) {
     // Initialize content handler
-    $content_handler = xoops_getmodulehandler('page', $forMods->getVar('dirname'));
-    $content = $content_handler->get($id);
+    $pageHandler = Helper::getInstance()->getHandler('Page');
+    $content         = $pageHandler->get($id);
     $content->setVar('content_text', $content_text);
-    if (!$content_handler->insert($content)) {
+    if (!$pageHandler->insert($content)) {
         echo 'Error';
     } else {
         echo $content_text;
     }
 }
-?>

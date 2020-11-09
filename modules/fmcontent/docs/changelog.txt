@@ -1,3 +1,8 @@
+1.11 Beta 1        2014-04-23
+=================================
+- moved all images, CSS, and JS files to /assets (mamba)
+- renamed .html Smarty templates to .tpl (mamba)
+
 1.10
 =================================
 - Add uploadimg function in utils class (Voltan)
@@ -27,10 +32,10 @@ Language changes :
 * Edit
 
 main.php
-+ _FMCONTENT_TOPIC_ID 
-+ _FMCONTENT_TOPIC_NAME 
-+ _FMCONTENT_TOPIC_DESC 
-+ _FMCONTENT_TOPIC_IMG 
++ _FMCONTENT_TOPIC_ID
++ _FMCONTENT_TOPIC_NAME
++ _FMCONTENT_TOPIC_DESC
++ _FMCONTENT_TOPIC_IMG
 
 admin.php
 + _FMCONTENT_TOPIC_HOMEPAGE
@@ -70,20 +75,20 @@ admin.php
 + _FMCONTENT_META_TITLE
 + _FMCONTENT_META_KEYWORD
 + _FMCONTENT_META_DESCRIPTION
-    
+
 * _FMCONTENT_TOPIC_ONLINE
 * _FMCONTENT_TOPIC_TIPS
 
 modinfo.php
-+ _FMCONTENT_HOMEPAGE 
-+ _FMCONTENT_HOMEPAGE_DESC 
-+ _FMCONTENT_HOMEPAGE_1 
-+ _FMCONTENT_HOMEPAGE_2 
-+ _FMCONTENT_HOMEPAGE_3 
++ _FMCONTENT_HOMEPAGE
++ _FMCONTENT_HOMEPAGE_DESC
++ _FMCONTENT_HOMEPAGE_1
++ _FMCONTENT_HOMEPAGE_2
++ _FMCONTENT_HOMEPAGE_3
 + _FMCONTENT_HOMEPAGE_4
 + _FMCONTENT_URL_SHORT
 + _FMCONTENT_TOPICNAME
-+ _FMCONTENT_TOPICNAME_DESC   
++ _FMCONTENT_TOPICNAME_DESC
 + _FMCONTENT_FILE
 + _FMCONTENT_FILE_DIR
 + _FMCONTENT_FILE_DIR_DESC
@@ -99,7 +104,7 @@ modinfo.php
 
 1.05
 =================================
-- Improve blocks (ianez - Voltan) 
+- Improve blocks (ianez - Voltan)
 - Fix bug in getTopicCount (Voltan)
 - Fix menu block for show all contents (Voltan)
 - improve all templates (ianez)
@@ -114,7 +119,7 @@ modinfo.php
 - Fix fmcontent_AjaxFilter (ianez - Voltan)
 - improve all templates (ianez)
 
-1.03 
+1.03
 =================================
 - Fix error if topic not exist (Voltan)
 - Fix error FolderHandler in tools.php (Voltan)
@@ -127,7 +132,7 @@ modinfo.php
 - Chage page block setting for select dynamic pages (Voltan)
 - Add Breadcrumb (Voltan)
 
-1.02 
+1.02
 =================================
 - Rename module from forcontent to fmcontent (For Muss content)
 - Fix RSS bug (formuss)
@@ -143,7 +148,7 @@ modinfo.php
 - Fix some bugs and improve block templates (Voltan)
 - Add option for add title to menu title and Meta Keywords and Meta Description whit ajax in submit page (Voltan)
 
-1.01 
+1.01
 =================================
 - Add topic (Voltan)
 - Complate menu system (Voltan)
@@ -163,6 +168,6 @@ modinfo.php
 - Default content for each topic (Voltan)
 - adjusted Admin GUI to XOOPS Standard Module GUI (mamba)
 
-1.00 
+1.00
 =================================
 Original release (For Muss)

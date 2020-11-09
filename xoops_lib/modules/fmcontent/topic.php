@@ -12,64 +12,70 @@
 /**
  * FmContent topic file
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright   XOOPS Project (https://xoops.org)
  * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
  * @author      Hossein Azizabadi (AKA Voltan)
- * @version   $Id$
  */
-if (! isset ( $forMods ))
-	exit ( 'Module not found' ); 
 
-include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
+use Xmf\Request;
+use XoopsModules\Fmcontent;
+use XoopsModules\Fmcontent\Helper;
 
-$content_handler = xoops_getmodulehandler ( 'page', 'fmcontent' );
-$topic_handler = xoops_getmodulehandler ( 'topic', 'fmcontent' );
+if (!isset($forMods)) {
+    exit('Module not found');
+}
+
+require __DIR__ . '/header.php';
+
+include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+
+$pageHandler = Helper::getInstance()->getHandler('Page');
+$topicHandler   = Helper::getInstance()->getHandler('Topic');
 
 // Include content template
-$xoopsOption ['template_main'] = 'fmcontent_topic.html';
+$xoopsOption ['template_main'] = 'fmcontent_topic.tpl';
 
 // include Xoops header
 include XOOPS_ROOT_PATH . '/header.php';
 
 // Add Stylesheet
-$xoTheme->addStylesheet ( XOOPS_URL . '/modules/' . $forMods->getVar ( 'dirname' ) . '/css/style.css' );
+$xoTheme->addStylesheet(XOOPS_URL . '/modules/' . $forMods->getVar('dirname') . '/css/style.css');
 
 // get module configs
 $topic_perpage = xoops_getModuleOption('admin_perpage_topic', $forMods->getVar('dirname'));
-$topic_order = xoops_getModuleOption('admin_showorder_topic', $forMods->getVar('dirname'));
-$topic_sort = xoops_getModuleOption('admin_showsort_topic', $forMods->getVar('dirname'));
+$topic_order   = xoops_getModuleOption('admin_showorder_topic', $forMods->getVar('dirname'));
+$topic_sort    = xoops_getModuleOption('admin_showsort_topic', $forMods->getVar('dirname'));
 
 // get limited information
-if (isset($_REQUEST['limit'])) {
-   $topic_limit = fmcontent_CleanVars($_REQUEST, 'limit', 0, 'int');
+if (Request::hasVar('limit', 'REQUEST')) {
+    $topic_limit = Request::getInt('limit', 0);
 } else {
-   $topic_limit = $topic_perpage;
+    $topic_limit = $topic_perpage;
 }
 
 // get start information
-if (isset($_REQUEST['start'])) {
-   $topic_start = fmcontent_CleanVars($_REQUEST, 'start', 0, 'int');
+if (Request::hasVar('start', 'REQUEST')) {
+    $topic_start = Request::getInt('start', 0);
 } else {
-   $topic_start = 0;
+    $topic_start = 0;
 }
 
-$topics = $topic_handler->getTopics($forMods, $topic_limit, $topic_start, $topic_order, $topic_sort, $topic_menu = null, $topic_online = null , $topic_parent = null);
-$topic_numrows = $topic_handler->getTopicCount($forMods);
+$topics        = $topicHandler->getTopics($forMods, $topic_limit, $topic_start, $topic_order, $topic_sort, $topic_menu = null, $topic_online = null, $topic_parent = null);
+$topic_numrows = $topicHandler->getTopicCount($forMods);
 
 if ($topic_numrows > $topic_limit) {
-   $topic_pagenav = new XoopsPageNav($topic_numrows, $topic_limit, $topic_start, 'start', 'limit=' . $topic_limit);
-   $topic_pagenav = $topic_pagenav->renderNav(4);
+    $topic_pagenav = new \XoopsPageNav($topic_numrows, $topic_limit, $topic_start, 'start', 'limit=' . $topic_limit);
+    $topic_pagenav = $topic_pagenav->renderNav(4);
 } else {
-   $topic_pagenav = '';
+    $topic_pagenav = '';
 }
-        
+
 $xoopsTpl->assign('topics', $topics);
 $xoopsTpl->assign('topic_pagenav', $topic_pagenav);
 $xoopsTpl->assign('xoops_dirname', $forMods->getVar('dirname'));
-$xoopsTpl->assign ( 'advertisement', xoops_getModuleOption ( 'advertisement', $forMods->getVar ( 'dirname' ) ) );
-$xoopsTpl->assign ( 'imgwidth', xoops_getModuleOption ( 'imgwidth', $forMods->getVar ( 'dirname' ) ) );
-$xoopsTpl->assign ( 'imgfloat', xoops_getModuleOption ( 'imgfloat', $forMods->getVar ( 'dirname' ) ) );  
-    
+$xoopsTpl->assign('advertisement', xoops_getModuleOption('advertisement', $forMods->getVar('dirname')));
+$xoopsTpl->assign('imgwidth', xoops_getModuleOption('imgwidth', $forMods->getVar('dirname')));
+$xoopsTpl->assign('imgfloat', xoops_getModuleOption('imgfloat', $forMods->getVar('dirname')));
+
 // include Xoops footer
 include XOOPS_ROOT_PATH . '/footer.php';
-?>

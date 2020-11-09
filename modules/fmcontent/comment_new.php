@@ -12,13 +12,9 @@
 /**
  * FmContent index file
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @copyright   {@link https://xoops.org/ XOOPS Project}
+ * @license     {@link http://www.fsf.org/copyleft/gpl.html GNU public license}
  * @author      Andricq Nicolas (AKA MusS)
- * @version     $Id$
  */
-
-require dirname(__FILE__) . '/header.php';
-include_once XOOPS_TRUST_PATH . '/modules/fmcontent/comment_new.php';
-
-?>
+require_once __DIR__ . '/header.php';
+require_once XOOPS_TRUST_PATH . '/modules/fmcontent/comment_new.php';

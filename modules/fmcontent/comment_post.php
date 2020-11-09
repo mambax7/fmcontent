@@ -12,11 +12,9 @@
 /**
  * FmContent index file
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @copyright   {@link https://xoops.org/ XOOPS Project}
+ * @license     {@link http://www.fsf.org/copyleft/gpl.html GNU public license}
  * @author      Andricq Nicolas (AKA MusS)
- * @version     $Id$
  */
-include '../../mainfile.php';
-include XOOPS_ROOT_PATH . '/include/comment_post.php';
-?>
+require_once dirname(__DIR__, 2) . '/mainfile.php';
+require_once XOOPS_ROOT_PATH . '/include/comment_post.php';

@@ -8,30 +8,34 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+
 /**
  * FmContent header file
  * Manage content page
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @copyright   {@link https://xoops.org/ XOOPS Project}
+ * @license     {@link http://www.fsf.org/copyleft/gpl.html GNU public license}
  * @author      Andricq Nicolas (AKA MusS)
  * @package     forcontent
- * @version     $Id$
  */
 
-if (!defined('XOOPS_ROOT_PATH')) {
-    include_once '../../mainfile.php';
-}
-if (!defined('XOOPS_TRUST_PATH')) die('set XOOPS_TRUST_PATH into mainfile.php');
+use  XoopsModules\Fmcontent;
+use XoopsModules\Fmcontent\Helper;
+
+require dirname(__DIR__, 2) . '/mainfile.php';
+
+require XOOPS_TRUST_PATH . '/modules/fmcontent/preloads/autoloader.php';
 
 require_once XOOPS_TRUST_PATH . '/modules/fmcontent/include/functions.php';
-include_once XOOPS_TRUST_PATH . '/modules/fmcontent/class/perm.php';
-require_once XOOPS_TRUST_PATH . '/modules/fmcontent/class/utils.php';
+//require_once XOOPS_TRUST_PATH . '/modules/fmcontent/class/perm.php';
+//require_once XOOPS_TRUST_PATH . '/modules/fmcontent/class/utils.php';
 // Load template class
 require_once XOOPS_ROOT_PATH . '/class/template.php';
 
-$modsDirname = basename(dirname(__FILE__));
+$moduleDirName = basename(__DIR__);
+$helper = Helper::getInstance();
 
-$module_handler =& xoops_gethandler('module');
-$forMods =& $module_handler->getByDirname($modsDirname);
-?>
+/** @var \XoopsModuleHandler $moduleHandler */
+$moduleHandler = xoops_getHandler('module');
+$forMods       = $moduleHandler->getByDirname($moduleDirName);
+//$forMods =  $helper->getHandler($moduleDirName);

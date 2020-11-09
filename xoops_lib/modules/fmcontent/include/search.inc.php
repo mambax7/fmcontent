@@ -14,21 +14,27 @@
  *
  * @copyright           (http://www.)
  * @license            http://www.fsf.org/copyleft/gpl.html GNU public license
- * @author        TDM ; TEAM DEV MODULE
+ * @author             TDM ; TEAM DEV MODULE
  *
  * ****************************************************************************
  */
 
-if (!defined('XOOPS_ROOT_PATH')) {
-    die("XOOPS root path not defined");
+use XoopsModules\Fmcontent;
+use XoopsModules\Fmcontent\Helper;
+
+defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
+
+/**
+ * @param $queryarray
+ * @param $andor
+ * @param $limit
+ * @param $offset
+ * @param $userid
+ * @return mixed
+ */
+function fmcontent_search($queryarray, $andor, $limit, $offset, $userid)
+{
+    $pageHandler = Helper::getInstance()->getHandler('Page');
+
+    return $pageHandler->getSearchedContent($queryarray, $andor, $limit, $offset, $userid);
 }
-
-function fmcontent_search($queryarray, $andor, $limit, $offset, $userid) {
-
-    $content_handler = xoops_getmodulehandler('page', 'fmcontent');
-
-    return $content_handler->getSearchedContent($queryarray, $andor, $limit, $offset, $userid);
-
-}
-
-?>

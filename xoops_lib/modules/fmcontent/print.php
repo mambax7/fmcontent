@@ -12,50 +12,57 @@
 /**
  * FmContent print file
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright   XOOPS Project (https://xoops.org)
  * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
  * @author      Andricq Nicolas (AKA MusS)
  * @author      Hossein Azizabadi (AKA Voltan)
- * @version     $Id$
  */
 
-if (!isset($forMods)) exit('Module not found');
+use Xmf\Request;
+use XoopsModules\Fmcontent;
+use XoopsModules\Fmcontent\Helper;
+
+if (!isset($forMods)) {
+    exit('Module not found');
+}
+
+require __DIR__ . '/header.php';
 
 // Initialize content handler
-$content_handler = xoops_getmodulehandler('page', 'fmcontent');$topic_handler = xoops_getmodulehandler('topic', 'fmcontent');
+$pageHandler = Helper::getInstance()->getHandler('Page');
+$topicHandler   = Helper::getInstance()->getHandler('Topic');
 
-if(isset($_REQUEST['id'])) {
-	$content_id = fmcontent_CleanVars ( $_REQUEST, 'id', 0, 'int' );
+if (Request::hasVar('id', 'REQUEST')) {
+    $contentId = Request::getInt('id', 0);
 } else {
-	$content_alias = fmcontent_CleanVars ( $_REQUEST, 'page', 0, 'string' );
-	if($content_alias) {
-		$content_id = $content_handler->getId($content_alias);
-	}
+    $content_alias = Request::getString('page', 0);
+    if ($content_alias) {
+        $contentId = $pageHandler->getId($content_alias);
+    }
 }
 
 // Initialize template
-$xoopsTpl = new XoopsTpl();
+$xoopsTpl = new \XoopsTpl();
+$page     = [];
 
-$obj = $content_handler->get($content_id);
+$obj = $pageHandler->get($contentId);
 
 // Get user right
-$group = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(XOOPS_GROUP_ANONYMOUS);
-$groups = explode(" ", $obj->getVar('content_groups'));
+$group  = is_object($xoopsUser) ? $xoopsUser->getGroups() : [XOOPS_GROUP_ANONYMOUS];
+$groups = explode(' ', $obj->getVar('content_groups'));
 if (count(array_intersect($group, $groups)) <= 0) {
     redirect_header('index.php', 2, _NOPERM);
     exit();
 }
-if ($group[0] == XOOPS_GROUP_ADMIN) {
+if (XOOPS_GROUP_ADMIN == $group[0]) {
     $xoopsTpl->assign('admin', 1);
 }
 
-$page = array();
-$page = $obj->toArray();
+$page          = $obj->toArray();
 $content_topic = $obj->getVar('content_topic');
 
 if (isset($content_topic) && $content_topic > 0) {
-
-    $view_topic = $topic_handler->get($content_topic);
+    $view_topic = $topicHandler->get($content_topic);
 
     if (!isset($view_topic)) {
         redirect_header('index.php', 3, _FMCONTENT_TOPIC_ERROR);
@@ -67,36 +74,39 @@ if (isset($content_topic) && $content_topic > 0) {
         exit();
     }
 
-    if ($view_topic->getVar('topic_online') == '0') {
+    if ('0' == $view_topic->getVar('topic_online')) {
         redirect_header('index.php', 3, _FMCONTENT_TOPIC_ERROR);
         exit();
     }
 
     // Check the access permission
-    $perm_handler = fmcontentPermission::getHandler();
+    $perm_handler = Fmcontent\Permission::getHandler();
     if (!$perm_handler->isAllowed($xoopsUser, 'fmcontent_access', $view_topic->getVar('topic_id'), $forMods)) {
-        redirect_header("index.php", 3, _NOPERM);
+        redirect_header('index.php', 3, _NOPERM);
         exit;
     }
 
-    if (xoops_getModuleOption('disp_option', $forMods->getVar('dirname')) && $view_topic->getVar('topic_showprint') == '0') {
-        redirect_header("index.php", 3, _NOPERM);
+    if (xoops_getModuleOption('disp_option', $forMods->getVar('dirname'))
+        && '0' == $view_topic->getVar('topic_showprint')) {
+        redirect_header('index.php', 3, _NOPERM);
         exit;
-    } elseif (xoops_getModuleOption('disp_printlink', $forMods->getVar('dirname')) == '0') {
-        redirect_header("index.php", 3, _NOPERM);
+    }
+
+    if ('0' == xoops_getModuleOption('disp_printlink', $forMods->getVar('dirname'))) {
+        redirect_header('index.php', 3, _NOPERM);
         exit;
     }
 }
 
-$page['title'] = $obj->getVar('content_title');
-$page['alias'] = $obj->getVar('content_alias');
-$page['short'] = $obj->getVar('content_short');
-$page['text'] = $obj->getVar('content_text');
-$page['img'] = $obj->getVar('content_img');
+$page['title']  = $obj->getVar('content_title');
+$page['alias']  = $obj->getVar('content_alias');
+$page['short']  = $obj->getVar('content_short');
+$page['text']   = $obj->getVar('content_text');
+$page['img']    = $obj->getVar('content_img');
 $page['imgurl'] = XOOPS_URL . xoops_getModuleOption('img_dir', $forMods->getVar('dirname')) . $obj->getVar('content_img');
-$page['author'] = XoopsUser::getUnameFromId($obj->getVar('content_uid'));
-$page['date'] = formatTimestamp($obj->getVar('content_create'), _MEDIUMDATESTRING);
-$page['link'] = fmcontent_Url($forMods->getVar('dirname'), $page);
+$page['author'] = \XoopsUser::getUnameFromId($obj->getVar('content_uid'));
+$page['date']   = formatTimestamp($obj->getVar('content_create'), _MEDIUMDATESTRING);
+$page['link']   = fmcontent_Url($forMods->getVar('dirname'), $page);
 
 $xoopsTpl->assign('content', $page);
 $xoopsTpl->assign('module', $forMods->getVar('dirname'));
@@ -135,6 +145,4 @@ $xoopsTpl->assign('print_title', xoops_getModuleOption('print_title', $forMods->
 $xoopsTpl->assign('print_columns', xoops_getModuleOption('print_columns', $forMods->getVar('dirname')));
 
 // Display print page
-echo $xoopsTpl->fetch(XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->getInfo('dirname') . '/templates/fmcontent_print.html');
-
-?>
+echo $xoopsTpl->fetch(XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->getInfo('dirname') . '/templates/fmcontent_print.tpl');

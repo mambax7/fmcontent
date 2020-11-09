@@ -13,34 +13,32 @@
  * FmContent header file
  * Manage content page
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @copyright   {@link https://xoops.org/ XOOPS Project}
+ * @license     {@link http://www.fsf.org/copyleft/gpl.html GNU public license}
  * @author      Andricq Nicolas (AKA MusS)
  * @package     forcontent
- * @version     $Id$
  */
 
-require '../../../mainfile.php';
-if (!defined('XOOPS_TRUST_PATH')) die('set XOOPS_TRUST_PATH into mainfile.php');
+//use XoopsModules\Fmcontent;
 
-require_once $GLOBALS['xoops']->path('/include/cp_header.php');
-require_once $GLOBALS['xoops']->path('/class/tree.php');
-require_once $GLOBALS['xoops']->path('/modules/fmcontent/class/folder.php');
+require dirname(__DIR__, 3) . '/include/cp_header.php';
+
+require XOOPS_TRUST_PATH . '/modules/fmcontent/preloads/autoloader.php';
+
+//require XOOPS_TRUST_PATH . '/modules/fmcontent/preloads/autoloader.php';
+
+//require_once dirname(dirname(dirname(__DIR__))) . '/mainfile.php';
+
+
+require_once $GLOBALS['xoops']->path('include/cp_header.php');
+require_once $GLOBALS['xoops']->path('class/tree.php');
+//require_once $GLOBALS['xoops']->path('modules/fmcontent/class/folder.php');
 
 require_once XOOPS_TRUST_PATH . '/modules/fmcontent/include/functions.php';
-require_once XOOPS_TRUST_PATH . '/modules/fmcontent/class/utils.php';
-
-if ( file_exists($GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php'))){
-   include_once $GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php');
-   //return true;
-}else{
-   redirect_header("../../../admin.php", 5, _AM_MODULEADMIN_MISSING, false); 
-   //return false;
-}
+//require_once XOOPS_TRUST_PATH . '/modules/fmcontent/class/utils.php';
 
 xoops_load('xoopsformloader');
 
-$module_handler =& xoops_gethandler('module');
-$forMods =& $module_handler->getByDirname(basename(dirname(dirname(__FILE__))));
-
-?>
+/** @var \XoopsModuleHandler $moduleHandler */
+$moduleHandler = xoops_getHandler('module');
+$forMods       = $moduleHandler->getByDirname(basename(dirname(__DIR__)));

@@ -12,16 +12,12 @@
 /**
  * FmContent edit in place file
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @copyright   {@link https://xoops.org/ XOOPS Project}
+ * @license     {@link http://www.fsf.org/copyleft/gpl.html GNU public license}
  * @author      Andricq Nicolas (AKA MusS)
- * @version     $Id$
  */
+$mod_dirname = basename(__DIR__);
+$mod_dirpath = __DIR__;
 
-$mod_dirname = basename(dirname(__FILE__));
-$mod_dirpath = dirname(__FILE__);
-
-require $mod_dirpath . '/header.php';
-require XOOPS_TRUST_PATH . '/modules/fmcontent/admin/ajax.php';
-
-?>
+require_once $mod_dirpath . '/header.php';
+require_once XOOPS_TRUST_PATH . '/modules/fmcontent/admin/ajax.php';

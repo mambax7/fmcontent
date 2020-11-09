@@ -12,19 +12,16 @@
 /**
  * FmContent page class
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @copyright   {@link https://xoops.org/ XOOPS Project}
+ * @license     {@link http://www.fsf.org/copyleft/gpl.html GNU public license}
  * @author      Andricq Nicolas (AKA MusS)
- * @version     $Id$
  */
 
-if (!defined('XOOPS_TRUST_PATH')) die('set XOOPS_TRUST_PATH into mainfile.php');
 
-$mod_dirname = basename(dirname(dirname(__FILE__)));
-$mod_dirpath = dirname(dirname(__FILE__));
 
-require $mod_dirpath . '/header.php';
+$mod_dirname = basename(dirname(__DIR__));
+$mod_dirpath = dirname(__DIR__);
 
-include_once XOOPS_TRUST_PATH . '/modules/fmcontent/include/search.inc.php';
+require_once $mod_dirpath . '/header.php';
 
-?>
+require_once XOOPS_TRUST_PATH . '/modules/fmcontent/include/search.inc.php';

@@ -12,13 +12,9 @@
 /**
  * FmContent topic file
  *
- * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
- * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
+ * @copyright   {@link https://xoops.org/ XOOPS Project}
+ * @license     {@link http://www.fsf.org/copyleft/gpl.html GNU public license}
  * @author      Hossein Azizabadi (AKA Voltan)
- * @version     $Id$
  */
-
-require dirname(__FILE__) . '/header.php';
-require XOOPS_TRUST_PATH . '/modules/fmcontent/topic.php';
-
-?>
+require_once __DIR__ . '/header.php';
+require_once XOOPS_TRUST_PATH . '/modules/fmcontent/topic.php';
